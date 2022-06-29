@@ -2,6 +2,7 @@
 import './App.css';
 import axios from 'axios'
 import { useState, useEffect } from 'react'
+import CountryInfo from './Components/CountryInfo';
 
 const endPoint = 'https://restcountries.com/v3.1/all'
 
@@ -40,27 +41,14 @@ function App() {
     }
 
     else if (filter.length === 1) {
-      setCountry(filter.map((countryObj, index) => {
-
-        return (
-          <div>
-            <h1>{countryObj.name.common}</h1>
-            <br></br>
-            <div>Capital: {countryObj.capital}</div>
-            <div>Area: {countryObj.area}</div>
-            <br></br>
-            <ul>
-              Languajes:
-              {Object.keys(countryObj.languages).map(language =>
-                <li>{language}</li>)}
-            </ul>
-            <img src={countryObj.flags.png} />
-          </div>
-        )
-      }))
+      setCountry(filter
+        .map((countryObj, index) =>
+          <CountryInfo index={index} countryObj={countryObj} />))
     }
     else {
-      setCountry(filter.map((countryObj, index) => <div key={index}>{countryObj.name.common}</div>))
+      setCountry(filter
+        .map((countryObj, index) =>
+          <div key={index}>{countryObj.name.common}</div>))
     }
   }
 
