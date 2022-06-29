@@ -10,14 +10,12 @@ function App() {
   const [filter, setFilter] = useState([])
   const [country, setCountry] = useState('')
 
-
   const countryList = () => {
     axios
       .get(endPoint)
       .then(response => {
         setCountries(response.data)
       });
-
   }
 
   useEffect(countryList, [filter])
@@ -34,7 +32,6 @@ function App() {
     setFilter([...filteredCountryNames])
 
     checkLenght(filteredCountryNames)
-
   }
 
   function checkLenght(filter) {
@@ -44,7 +41,6 @@ function App() {
 
     else if (filter.length === 1) {
       setCountry(filter.map((countryObj, index) => {
-        console.log(countryObj)
 
         return (
           <div>
@@ -63,7 +59,6 @@ function App() {
         )
       }))
     }
-
     else {
       setCountry(filter.map((countryObj, index) => <div key={index}>{countryObj.name.common}</div>))
     }
