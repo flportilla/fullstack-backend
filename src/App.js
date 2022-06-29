@@ -22,8 +22,17 @@ function App() {
   useEffect(countryList, [filter])
 
   function filterCountry(event) {
+    let searchedValue;
 
-    const searchedValue = event.target.value
+    if (event._reactName == 'onChange') {
+      searchedValue = event.target.value
+    }
+
+    if (event._reactName == 'onClick') {
+      searchedValue = (event.target.id).toLowerCase()
+    }
+
+
 
     const filteredCountryNames = countries
       .filter(country =>
@@ -33,6 +42,7 @@ function App() {
     setFilter([...filteredCountryNames])
 
     checkLenght(filteredCountryNames)
+    console.log(filter.map(country => console.log(country.latlng)))
   }
 
   function checkLenght(filter) {
@@ -47,8 +57,23 @@ function App() {
     }
     else {
       setCountry(filter
-        .map((countryObj, index) =>
-          <div key={index}>{countryObj.name.common}</div>))
+        .map((countryObj, index) => {
+          return (
+            <>
+              <div key={index}>{countryObj.name.common}
+                <span>
+                  <button
+                    id={countryObj.name.common}
+                    type='button'
+                    onClick={filterCountry}
+                  >
+                    show
+                  </button>
+                </span>
+              </div>
+            </>
+          )
+        }))
     }
   }
 
