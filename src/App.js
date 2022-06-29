@@ -35,14 +35,15 @@ function App() {
 
 
     const filteredCountryNames = countries
-      .filter(country =>
-        country.name.common.toLowerCase()
-          .includes(searchedValue));
+      .filter(country => {
+        const { name } = country
+        name.common.toLowerCase()
+          .includes(searchedValue)
+      });
 
     setFilter([...filteredCountryNames])
 
     checkLenght(filteredCountryNames)
-    console.log(filter.map(country => console.log(country.latlng)))
   }
 
   function checkLenght(filter) {
