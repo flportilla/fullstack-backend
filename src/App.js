@@ -3,33 +3,83 @@ import './App.css';
 import axios from 'axios'
 import { useState, useEffect } from 'react'
 
+const endPoint = 'https://restcountries.com/v3.1/all'
+
 function App() {
-  const [notes, setNotes] = useState([])
-  const getData = () => {
+  const [countries, setCountries] = useState([])
+  const [filter, setFilter] = useState([])
+  const [country, setCountry] = useState('')
 
-    console.log('effect')
+
+  const countryList = () => {
     axios
-      .get('http://localhost:3001/notes')
+      .get(endPoint)
       .then(response => {
-        console.log('promise fulfilled')
-        setNotes(response.data)
-      })
-  };
+        setCountries(response.data)
+      });
 
+  }
 
-  useEffect(getData, [])
+  useEffect(countryList, [filter])
 
-  console.log('render', notes.length, 'notes')
+  function filterCountry(event) {
+
+    const searchedValue = event.target.value
+
+    const filteredCountryNames = countries
+      .filter(country =>
+        country.name.common.toLowerCase()
+          .includes(searchedValue));
+
+    setFilter([...filteredCountryNames])
+
+    checkLenght(filteredCountryNames)
+
+  }
+
+  function checkLenght(filter) {
+    if (filter.length > 10) {
+      setCountry('too many matches')
+    }
+
+    else if (filter.length === 1) {
+      setCountry(filter.map((countryObj, index) => {
+        console.log(countryObj)
+
+        return (
+          <div>
+            <h1>{countryObj.name.common}</h1>
+            <br></br>
+            <div>Capital: {countryObj.capital}</div>
+            <div>Area: {countryObj.area}</div>
+            <br></br>
+            <ul>
+              Languajes:
+              {Object.keys(countryObj.languages).map(language =>
+                <li>{language}</li>)}
+            </ul>
+            <img src={countryObj.flags.png} />
+          </div>
+        )
+      }))
+    }
+
+    else {
+      setCountry(filter.map((countryObj, index) => <div key={index}>{countryObj.name.common}</div>))
+    }
+  }
 
   return (
     <div className="App">
-      {
-        notes.map(note => {
-          const { id, content } = note
-          return <div key={id}>{content}</div>
-        }
-        )}
-    </div>
+      <span>
+        Find countries:
+        <input
+          onChange={filterCountry} />
+      </span>
+      <div>
+        {country}
+      </div>
+    </div >
   );
 }
 
